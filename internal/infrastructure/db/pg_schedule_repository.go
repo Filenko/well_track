@@ -20,7 +20,6 @@ func NewPgScheduleRepository(db *sql.DB, logger *zerolog.Logger) repository.Sche
 	}
 }
 
-// предполагаем таблицу schedules(id bigserial, user_id bigint, interval_hours int, last_notification_time timestamptz)
 func (r *pgScheduleRepository) GetByUserID(userID model.UserID) (*model.Schedule, error) {
 	row := r.db.QueryRow(`
         SELECT id, user_id, interval_hours, last_notification_time
@@ -44,15 +43,11 @@ func (r *pgScheduleRepository) GetByUserID(userID model.UserID) (*model.Schedule
 }
 
 func (r *pgScheduleRepository) Upsert(s *model.Schedule) error {
-	// upsert по user_id
-	// PostgreSQL 9.5+ можно делать ON CONFLICT (user_id) DO UPDATE
-	// Для упрощения сделаем SELECT -> INSERT / UPDATE
 	existing, err := r.GetByUserID(s.UserID)
 	if err != nil {
 		return err
 	}
 	if existing == nil {
-		// INSERT
 		row := r.db.QueryRow(`
             INSERT INTO schedules(user_id, interval_hours, last_notification_time)
             VALUES ($1, $2, $3)
@@ -64,7 +59,6 @@ func (r *pgScheduleRepository) Upsert(s *model.Schedule) error {
 		}
 		s.ID = model.ScheduleID(newID)
 	} else {
-		// UPDATE
 		_, err := r.db.Exec(`
             UPDATE schedules
             SET interval_hours = $1, last_notification_time = $2

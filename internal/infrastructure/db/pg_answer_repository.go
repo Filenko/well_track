@@ -19,7 +19,6 @@ func NewPgAnswerRepository(db *sql.DB, logger *zerolog.Logger) repository.Answer
 	}
 }
 
-// answers(id bigserial, user_id bigint, rating int, comment text, created_at timestamptz)
 func (r *pgAnswerRepository) Create(a *model.Answer) error {
 	row := r.db.QueryRow(`
         INSERT INTO answers(user_id, rating, comment, created_at)

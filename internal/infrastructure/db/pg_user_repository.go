@@ -19,7 +19,6 @@ func NewPgUserRepository(db *sql.DB, logger *zerolog.Loggerw) repository.UserRep
 	}
 }
 
-// пример таблицы: users(id bigserial primary key, telegram_id bigint, created_at timestamptz)
 func (r *pgUserRepository) GetByTelegramID(tgID model.TelegramID) (*model.User, error) {
 	row := r.db.QueryRow(`
         SELECT id, telegram_id, created_at FROM users WHERE telegram_id = $1

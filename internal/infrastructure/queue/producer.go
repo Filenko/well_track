@@ -27,7 +27,6 @@ type rabbitProducer struct {
 }
 
 func NewRabbitProducer(ch *amqp.Channel, exchange, routingKey string, logger *zerolog.Logger) (Producer, error) {
-	// Предположим, что exchange уже создан как x-delayed-message (или создадим)
 	err := ch.ExchangeDeclare(
 		exchange,
 		"x-delayed-message",
