@@ -1,0 +1,20 @@
+env: "prod"
+
+telegram:
+  telegram_api_token: "..."
+
+postgres:
+  host: "localhost"
+  port: 5432
+  user: "welltrack"
+  password: "welltrack"
+  database: "welltrack"
+
+redis:
+  address: "localhost:6379"
+
+rabbitmq:
+  host: "localhost"
+  port: 5672
+  user: "guest"
+  password: "guest"
